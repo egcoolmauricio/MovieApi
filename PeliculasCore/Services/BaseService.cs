@@ -63,6 +63,14 @@ namespace PeliculasCore.Services
             repository.Update(entity);
         }
 
+        public Task UpdateAsync<TCreation>(int id, TCreation creationDto)
+        {
+            var entity = mapper.Map<T>(creationDto);
+            entity.Id = id;
+            repository.Update(entity);
+            return Task.CompletedTask;
+        }
+
         public bool Remove(int id)
         {
             if (!repository.Any(x => x.Id == id))

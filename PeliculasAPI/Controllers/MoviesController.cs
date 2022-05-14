@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc;
 using PeliculasAPI.Helpers;
 using PeliculasCore.DTOs;
 using PeliculasCore.DTOs.Movie;
 using PeliculasCore.Services;
+
 
 namespace PeliculasAPI.Controllers
 {
@@ -55,6 +57,31 @@ namespace PeliculasAPI.Controllers
         public async Task<ActionResult> Delete(int id)
         {
             return await movieService.RemoveAsync(id) ? NoContent() : NotFound();
+        }
+        
+
+        [HttpPatch("{id]")]
+        public async Task<ActionResult> Patch(int id, [FromBody] JsonPatchDocument<MoviePatchDto> patchDocument)
+        {
+            if(patchDocument == null)
+            {
+                return BadRequest();
+            }
+            var moviePatchDto = await movieService.FindOrDefaultAsync<MoviePatchDto>(id);
+            if(moviePatchDto == null)
+            {
+                return NotFound();
+            }
+            patchDocument.ApplyTo(moviePatchDto, ModelState);
+
+            var isValid = TryValidateModel(moviePatchDto);
+
+            if (!isValid)
+            {
+                return BadRequest();
+            }
+
+            return Ok();
         }
 
     }
