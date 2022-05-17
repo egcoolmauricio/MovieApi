@@ -20,5 +20,9 @@ namespace PeliculasCore.Models
         public DateTime ReleaseDate { get; set; }
 
         public string? Poster { get; set; }
+
+        public virtual List<MovieGeneroAssoc>? MovieGeneroAssocs { get; set; }
+
+        public virtual List<MovieActorAssoc>? MovieActorAssocs { get; set; }
     }
 }

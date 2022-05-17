@@ -30,6 +30,7 @@ namespace PeliculasCore.Services
         public async Task<MovieDto> AddAsync(MovieCreationDto movie)
         {
             var entity = mapper.Map<Movie>(movie);
+            AssignOrder(entity);
             if (movie.Poster != null)
             {
                 using var stream = new MemoryStream();
@@ -48,23 +49,32 @@ namespace PeliculasCore.Services
             {
                 return false;
             }
-            var entity = mapper.Map<Movie>(movieDto);
-
+            movieDb = mapper.Map<Movie>(movieDto);
+            
             if (movieDto.Poster != null)
             {
                 using var stream = new MemoryStream();
                 await movieDto.Poster.CopyToAsync(stream);
                 var content = stream.ToArray();
                 var extension = Path.GetExtension(movieDto.Poster.FileName);
-                entity.Poster = await fileStorageService.Edit(content, extension, container,
-                    movieDb.Poster, movieDto.Poster.ContentType);
+                movieDb.Poster = await fileStorageService.Edit(content, extension, container,
+                     movieDto.Poster.ContentType, movieDb.Poster);
             }
-
-            entity.Id = id;
-            movieRepository.Update(entity);
+            movieRepository.Update(movieDb);
             return true;
         }
 
+        private void AssignOrder(Movie movie)
+        {
+            if (movie.MovieActorAssocs == null)
+            {
+                return;
+            }
+            movie.MovieActorAssocs
+                .Select((item, index) => (item, index))
+                .ToList()
+                .ForEach(x => x.item.Order = x.index);
+        }
 
    
 

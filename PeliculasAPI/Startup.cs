@@ -20,7 +20,8 @@ namespace PeliculasAPI
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers()
+                .AddNewtonsoftJson();
             services.AddEndpointsApiExplorer();
             services.AddDbContext<ApplicationDbContext>(options =>
             {
@@ -30,6 +31,8 @@ namespace PeliculasAPI
             services.AddTransient<GeneroService>();
             services.AddTransient<ActorService>();
             services.AddTransient<ActorRepository>();
+            services.AddTransient<MovieService>();
+            services.AddTransient<MovieRepository>();
             services.AddHttpContextAccessor();
             services.AddAutoMapper(mc => mc.AddProfile(new AutoMapperProfiles()));
             services.AddTransient<IFileStorageService, LocalStorageService>();

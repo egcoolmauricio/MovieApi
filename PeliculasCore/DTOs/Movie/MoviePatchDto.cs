@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using PeliculasCore.Helpers;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -16,5 +18,9 @@ namespace PeliculasCore.DTOs.Movie
         public bool OnScreen { get; set; }
 
         public DateTime ReleaseDate { get; set; }
+
+       
+
+
     }
 }

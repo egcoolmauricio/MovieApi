@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PeliculasCore.DataAccess;
 
@@ -11,9 +12,10 @@ using PeliculasCore.DataAccess;
 namespace PeliculasCore.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220514203454_MovieActorAssoc_MovieGeneroAssoc")]
+    partial class MovieActorAssoc_MovieGeneroAssoc
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -106,7 +108,7 @@ namespace PeliculasCore.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("Order")
+                    b.Property<int>("ordery")
                         .HasColumnType("int");
 
                     b.HasKey("MovieId", "ActorId");
@@ -126,6 +128,13 @@ namespace PeliculasCore.Migrations
                         .HasColumnType("int")
                         .HasColumnName("genero_id");
 
+                    b.Property<string>("Character")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ordery")
+                        .HasColumnType("int");
+
                     b.HasKey("MovieId", "GeneroId");
 
                     b.HasIndex("GeneroId");
@@ -136,13 +145,13 @@ namespace PeliculasCore.Migrations
             modelBuilder.Entity("PeliculasCore.Models.MovieActorAssoc", b =>
                 {
                     b.HasOne("PeliculasCore.Models.Actor", "Actor")
-                        .WithMany("MovieActorAssocs")
+                        .WithMany()
                         .HasForeignKey("ActorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("PeliculasCore.Models.Movie", "Movie")
-                        .WithMany("MovieActorAssocs")
+                        .WithMany()
                         .HasForeignKey("MovieId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -155,13 +164,13 @@ namespace PeliculasCore.Migrations
             modelBuilder.Entity("PeliculasCore.Models.MovieGeneroAssoc", b =>
                 {
                     b.HasOne("PeliculasCore.Models.Genero", "Genero")
-                        .WithMany("MovieGeneroAssocs")
+                        .WithMany()
                         .HasForeignKey("GeneroId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("PeliculasCore.Models.Movie", "Movie")
-                        .WithMany("MovieGeneroAssocs")
+                        .WithMany()
                         .HasForeignKey("MovieId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -169,23 +178,6 @@ namespace PeliculasCore.Migrations
                     b.Navigation("Genero");
 
                     b.Navigation("Movie");
-                });
-
-            modelBuilder.Entity("PeliculasCore.Models.Actor", b =>
-                {
-                    b.Navigation("MovieActorAssocs");
-                });
-
-            modelBuilder.Entity("PeliculasCore.Models.Genero", b =>
-                {
-                    b.Navigation("MovieGeneroAssocs");
-                });
-
-            modelBuilder.Entity("PeliculasCore.Models.Movie", b =>
-                {
-                    b.Navigation("MovieActorAssocs");
-
-                    b.Navigation("MovieGeneroAssocs");
                 });
 #pragma warning restore 612, 618
         }

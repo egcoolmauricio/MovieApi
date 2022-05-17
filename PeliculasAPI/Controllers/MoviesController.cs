@@ -60,7 +60,7 @@ namespace PeliculasAPI.Controllers
         }
         
 
-        [HttpPatch("{id]")]
+        [HttpPatch("{id}")]
         public async Task<ActionResult> Patch(int id, [FromBody] JsonPatchDocument<MoviePatchDto> patchDocument)
         {
             if(patchDocument == null)
@@ -80,8 +80,10 @@ namespace PeliculasAPI.Controllers
             {
                 return BadRequest();
             }
-
-            return Ok();
+            ///TODO: this is not patching the model, it's saving the entire object
+            ///it can be done using the dbContext in the controller.
+            await movieService.UpdateAsync<MoviePatchDto>(id, moviePatchDto);
+            return NoContent();
         }
 
     }

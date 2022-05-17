@@ -10,7 +10,7 @@ namespace PeliculasCore.Services
     {
         Task<string> Save(byte[] data, string extension, string container, string contentType);
 
-        Task<string> Edit(byte[] data, string extension, string container, string contentType, string path);
+        Task<string> Edit(byte[] data, string extension, string container, string path, string contentType);
 
         Task Delete(string route, string container);
     }

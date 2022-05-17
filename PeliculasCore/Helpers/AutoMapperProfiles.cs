@@ -25,7 +25,34 @@ namespace PeliculasCore.Helpers
 
             CreateMap<Movie, MovieDto>().ReverseMap();
             CreateMap<MovieCreationDto, Movie>()
-                .ForMember(x => x.Poster, options => options.Ignore());
+                .ForMember(x => x.Poster, options => options.Ignore())
+                .ForMember(x => x.MovieGeneroAssocs , options => options.MapFrom(MapMovieGeneroAssoc))
+                .ForMember(x => x.MovieActorAssocs, options => options.MapFrom(MapMovieActorAssoc));
+
+
+            CreateMap<MoviePatchDto, Movie>().ReverseMap();
+        }
+
+        private List<MovieGeneroAssoc> MapMovieGeneroAssoc(MovieCreationDto movieCreation, Movie movie)
+        {
+            if(movieCreation.GeneroIds == null)
+            {
+                return new List<MovieGeneroAssoc>();
+            }
+            return movieCreation.GeneroIds
+                .Select(id => new MovieGeneroAssoc { GeneroId = id })
+                .ToList();
+        }
+
+        private List<MovieActorAssoc> MapMovieActorAssoc(MovieCreationDto movieCreation, Movie movie)
+        {
+            if (movieCreation.Actors == null)
+            {
+                return new List<MovieActorAssoc>();
+            }
+            return movieCreation.Actors
+                .Select(actor => new MovieActorAssoc { ActorId = actor.ActorId, Character = actor.CharacterName })
+                .ToList();
         }
     }
 }

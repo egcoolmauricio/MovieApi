@@ -14,5 +14,7 @@ namespace PeliculasCore.Models
         [Required]
         [StringLength(40)]
         public string Name { get; set; } = string.Empty;
+
+        public virtual List<MovieGeneroAssoc>? MovieGeneroAssocs { get; set; }
     }
 }

@@ -26,7 +26,7 @@ namespace PeliculasAPI.Services
             return Task.FromResult(0);
         }
 
-        public async Task<string> Edit(byte[] data, string extension, string container, string contentType, string path)
+        public async Task<string> Edit(byte[] data, string extension, string container, string path, string contentType)
         {
             await Delete(path, container);
             return await Save(data, extension, container, contentType);

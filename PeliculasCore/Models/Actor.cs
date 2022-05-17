@@ -18,5 +18,7 @@ namespace PeliculasCore.Models
         public DateTime BirthDate { get; set; }
 
         public string? Photo { get; set; }
+
+        public virtual List<MovieActorAssoc>? MovieActorAssocs { get; set; }
     }
 }

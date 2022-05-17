@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using PeliculasCore.DataAccess;
 using PeliculasCore.DTOs;
+using PeliculasCore.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace PeliculasCore.Repositories
 {
-    public class BaseRepository<T> : IBaseRepository<T> where T : class
+    public class BaseRepository<T> : IBaseRepository<T> where T : class, IEntityId
     {
         private readonly ApplicationDbContext db;
         public BaseRepository(ApplicationDbContext db)
@@ -24,19 +25,13 @@ namespace PeliculasCore.Repositories
 
         public virtual void UpdateRange(IEnumerable<T> entities)
         {            
-            foreach (var entity in entities)
-            {
-                db.Entry(entity).State = EntityState.Modified;
-            }
+            db.Set<T>().UpdateRange(entities);
             db.SaveChanges();
         }
 
         public virtual IEnumerable<T> AddRange(IEnumerable<T> entities)
-        {                                        
-            foreach (var entity in entities)
-            {
-                db.Entry(entity).State = EntityState.Added;                
-            }
+        {
+            db.Set<T>().AddRange(entities);
             db.SaveChanges();
             
             return entities;
@@ -60,16 +55,16 @@ namespace PeliculasCore.Repositories
 
         public virtual void Remove(T entity) => RemoveRange(new List<T> { entity });
 
-        public virtual T? FindOrDefault(int id) => db.Set<T>().Find(id);
+        public virtual T? FindOrDefault(int id) => db.Set<T>().AsNoTracking().FirstOrDefault(x => x.Id == id);
 
         public virtual async Task<T?> FindOrDefaultAsync(int id) => await db.Set<T>().FindAsync(id);
 
-        public virtual List<T> List() => db.Set<T>().ToList();
+        public virtual List<T> List() => db.Set<T>().AsNoTracking().ToList();
 
         public virtual List<T> List(PaginationDto pagination)
         {
             var skip = (pagination.Page - 1) * pagination.RowsPerPage;
-            return db.Set<T>().Skip(skip).Take(pagination.RowsPerPage).ToList();
+            return db.Set<T>().AsNoTracking().Skip(skip).Take(pagination.RowsPerPage).ToList();
         }
 
         public async virtual Task<List<T>> ListAsync(PaginationDto pagination)
