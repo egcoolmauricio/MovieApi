@@ -15,6 +15,8 @@ namespace PeliculasCore.Repositories
     public class BaseRepository<T> : IBaseRepository<T> where T : class, IEntityId
     {
         private readonly ApplicationDbContext db;
+        
+
         public BaseRepository(ApplicationDbContext db)
         {
             this.db = db;
@@ -71,6 +73,17 @@ namespace PeliculasCore.Repositories
         {
             var skip = (pagination.Page - 1) * pagination.RowsPerPage;
             return await db.Set<T>().AsNoTracking().Skip(skip).Take(pagination.RowsPerPage).ToListAsync();
+        }
+
+        public async virtual Task<List<T>> ListAsync(PaginationDto pagination, Expression<Func<T, bool>> predicate)
+        {
+            var skip = (pagination.Page - 1) * pagination.RowsPerPage;
+            return await db.Set<T>()
+                .AsNoTracking()
+                .Where(predicate)
+                .Skip(skip)
+                .Take(pagination.RowsPerPage)
+                .ToListAsync();
         }
 
 

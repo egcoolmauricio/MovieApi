@@ -2,7 +2,7 @@
 using PeliculasCore.DTOs;
 using PeliculasCore.DTOs.Actor;
 using PeliculasCore.DTOs.Genero;
-using PeliculasCore.DTOs.Movie;
+using PeliculasCore.DTOs.Movies;
 using PeliculasCore.Models;
 using System;
 using System.Collections.Generic;

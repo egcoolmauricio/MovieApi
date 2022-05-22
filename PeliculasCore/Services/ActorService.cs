@@ -42,8 +42,8 @@ namespace PeliculasCore.Services
             if(actorDb == null)
             {
                 return false;
-            }  
-            var entity = mapper.Map<Actor>(actor);
+            }
+            actorDb = mapper.Map<Actor>(actor);
 
             if (actor.Photo != null)
             {
@@ -51,12 +51,10 @@ namespace PeliculasCore.Services
                 await actor.Photo.CopyToAsync(stream);
                 var content = stream.ToArray();
                 var extension = Path.GetExtension(actor.Photo.FileName);
-                entity.Photo = await fileStorageService.Edit(content, extension, container, 
+                actorDb.Photo = await fileStorageService.Edit(content, extension, container, 
                     actorDb.Photo ,actor.Photo.ContentType);
             }
-
-            entity.Id = id;
-            actorRepository.Update(entity);
+            actorRepository.Update(actorDb);
             return true;
         }
        

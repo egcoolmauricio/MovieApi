@@ -2,11 +2,6 @@
 using PeliculasCore.DTOs;
 using PeliculasCore.Models;
 using PeliculasCore.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PeliculasCore.Services
 {
@@ -32,6 +27,7 @@ namespace PeliculasCore.Services
             var entities = await repository.ListAsync();
             return mapper.Map<List<TDto>>(entities);
         }
+        
         public async Task<List<TDto>> ListAsync<TDto>(PaginationDto pagination)
         {
             var entities = await repository.ListAsync(pagination);

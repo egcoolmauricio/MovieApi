@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PeliculasAPI.Helpers;
 using PeliculasCore.DTOs;
-using PeliculasCore.DTOs.Movie;
+using PeliculasCore.DTOs.Movies;
 using PeliculasCore.Services;
 
 
@@ -37,6 +37,13 @@ namespace PeliculasAPI.Controllers
                 return NotFound();
             }
             return movieDto;
+        }
+
+        [HttpGet("filter")]
+        public async Task<List<MovieDto>> Filter([FromQuery] MovieFilter filter)
+        {
+            var movies = await movieService.ListAsync(filter);
+            return movies;
         }
 
         [HttpPost()]

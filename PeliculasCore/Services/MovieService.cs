@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using PeliculasCore.DTOs;
-using PeliculasCore.DTOs.Movie;
+using PeliculasCore.DTOs.Movies;
 using PeliculasCore.Models;
 using PeliculasCore.Repositories;
 using System;
@@ -58,10 +58,16 @@ namespace PeliculasCore.Services
                 var content = stream.ToArray();
                 var extension = Path.GetExtension(movieDto.Poster.FileName);
                 movieDb.Poster = await fileStorageService.Edit(content, extension, container,
-                     movieDto.Poster.ContentType, movieDb.Poster);
+                    movieDb.Poster, movieDto.Poster.ContentType);
             }
             movieRepository.Update(movieDb);
             return true;
+        }
+
+        public async Task<List<MovieDto>> ListAsync(MovieFilter filter)
+        {
+            var entities = await movieRepository.ListAsync(filter.Pagination, filter.GetPredicate());
+            return mapper.Map<List<MovieDto>>(entities);
         }
 
         private void AssignOrder(Movie movie)

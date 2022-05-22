@@ -1,21 +1,26 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using PeliculasCore.Helpers;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PeliculasCore.DTOs.Movie
+namespace PeliculasCore.DTOs.Movies
 {
-    public class MovieDto
+    public class MoviePatchDto
     {
-        public int Id { get; set; }
-       
+        [Required]
+        [StringLength(300)]
         public string Title { get; set; }
 
         public bool OnScreen { get; set; }
 
         public DateTime ReleaseDate { get; set; }
 
-        public string? Poster { get; set; }
+       
+
+
     }
 }
